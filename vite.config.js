@@ -7,8 +7,8 @@ export default defineConfig({
     lib: {
       formats: ['esm', 'cjs'],
       entry: resolve(__dirname, 'index.js'),
-      name: 'jtdify',
-      fileName: 'jtdify',
+      name: 'pitico',
+      fileName: 'pitico',
     },
     rollupOptions: {
       external: [

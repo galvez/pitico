@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "jtdify",
+  "name": "pitico",
   "version": "0.1.0",
   "author": {
     "name": "Jonas Galvez",
@@ -18,8 +18,8 @@
   ],
   "exports": {
     ".": {
-      "require": "./dist/jtdify.cjs",
-      "import": "./dist/jtdify.esm.js"
+      "require": "./dist/pitico.cjs",
+      "import": "./dist/pitico.esm.js"
     }
   },
   "dependencies": {

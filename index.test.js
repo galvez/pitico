@@ -1,11 +1,11 @@
 import test from 'node:test'
 import assert from 'node:assert'
 
-import JTDify from './index.js'
+import Pitico from './index.js'
 import * as parse from './example/parse.js'
 import * as serialize from './example/serialize.js'
 
-const server = JTDify([parse, serialize])
+const server = Pitico([parse, serialize])
 
 test('should parse JSON requests', async (t) => {
   const res = await server.inject({

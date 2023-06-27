@@ -12,8 +12,10 @@ It is intended for writing **really small internal API servers** where **all you
   - Along with their **request and response schemas**
   - Using [`jsontypedef`](https://github.com/galvez/jsontypedef) under the hood for setting types
 - Minimal **compatibility with [Fastify](https://www.fastify.io/) plugins**
+  - `register()` works but will completely ignore encapsulation
   - `decorate()` extends the server instance
   - `decorateRequest()` extends `http.IncomingMessage` directly
+  - `inject()` behaves the same way for testing
 - [Ajv](https://ajv.js.org/)-optimized JSON parsing and validation based on [JTD schemas](https://jsontypedef.com/)
 - [Ajv](https://ajv.js.org/)-optimized JSON serialization based on [JTD schemas](https://jsontypedef.com/)
 
@@ -27,27 +29,26 @@ It is a radically minimal server so a few contraints are embraced:
 ## Install
 
 ```sh
-npm i jtdify --save
+npm i pitico --save
 ```
 
 ## Usage
 
-### **server.js**
+### Bootstrap: **server.js**
 
 ```js
-import JTDify from 'jtdify'
+import Pitico from 'pitico'
 
 import * as serialize from './serialize.js'
 
-const server = JTDify([serialize])
+const server = Pitico([serialize])
 
 await server.listen({ port: 3000 })
 ```
 
-### **serialize.js**
+### Route: **serialize.js**
 
 ```js
-
 export const path = '/serialize'
 
 export default (server, { object, string }) => ({

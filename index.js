@@ -10,7 +10,7 @@ const kRoutes = Symbol('kRoutes')
 const kDispatcher = Symbol('kDispatcher')
 const kServer = Symbol('kServer')
 
-export default function JTDify (endpoints) {
+export default function Pitico (endpoints) {
   const ajv = new Ajv()
   const routes = new Map()
   const server = {
@@ -21,7 +21,7 @@ export default function JTDify (endpoints) {
 
       if (handle) {
         handleRequest(req, route)
-          .then(req => handle(req))
+          .then(req => handle(req, res))
           .then(json => sendResponse(res, route, json))
           .catch(err => handleError(res, err))
       } else {

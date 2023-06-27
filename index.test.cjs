@@ -1,12 +1,12 @@
 const test = require('node:test')
 const assert = require('node:assert')
 
-const JTDify = require('./dist/jtdify.cjs')
+const Pitico = require('./dist/pitico.cjs')
 
 const parse = require('./example/parse.cjs')
 const serialize = require('./example/serialize.cjs')
 
-const server = JTDify([parse, serialize])
+const server = Pitico([parse, serialize])
 
 test('should parse JSON requests', async (t) => {
   const res = await server.inject({
