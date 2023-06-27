@@ -1,4 +1,4 @@
-const Pitico = require('../dist/pitico.cjs')
+const Pitico = require('pitico')
 
 const parse = require('./parse.js')
 const serialize = require('./serialize.js')

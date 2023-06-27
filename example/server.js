@@ -1,4 +1,4 @@
-import Pitico from '../dist/pitico.esm.js'
+import Pitico from 'pitico'
 
 import * as parse from './parse.js'
 import * as serialize from './serialize.js'
