@@ -1,7 +1,7 @@
 const Pitico = require('pitico')
 
-const parse = require('./parse.js')
-const serialize = require('./serialize.js')
+const parse = require('./parse.cjs')
+const serialize = require('./serialize.cjs')
 
 async function main () {
   const server = Pitico([parse, serialize])

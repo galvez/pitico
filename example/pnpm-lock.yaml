@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   pitico:
-    specifier: ^0.1.0
-    version: 0.1.0
+    specifier: ^0.1.1
+    version: 0.1.1
 
 packages:
 
@@ -73,8 +73,8 @@ packages:
       set-cookie-parser: 2.6.0
     dev: false
 
-  /pitico@0.1.0:
-    resolution: {integrity: sha512-InWG4IiIjMLya9PxOlSAXsPgSb8J23kQL25NJCG/HwukfiAyqT1sJ8tbTgeSEijTQEF2GMI878qtsRijX1yjOg==}
+  /pitico@0.1.1:
+    resolution: {integrity: sha512-MsHFKAI5+LIiFDToBRhz76wbc/wNYb9/z2zGSDYM1Bc0PpEQGNIGMZSH2WaL3xrXH3wrGUbC0rdKSRBd/ski3w==}
     dependencies:
       ajv: 8.12.0
       jsontypedef: 0.0.2
