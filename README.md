@@ -37,7 +37,7 @@ import JTDify from 'jtdify'
 
 import * as serialize from './serialize.js'
 
-const server = JTDify([parse, serialize])
+const server = JTDify([serialize])
 
 await server.listen({ port: 3000 })
 ```
