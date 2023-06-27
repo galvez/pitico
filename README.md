@@ -1,8 +1,8 @@
 <br>
 
-# JTDify [![NPM version](https://img.shields.io/npm/v/jtdify.svg?style=flat)](https://www.npmjs.com/package/jtdify) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
+# pitico [![NPM version](https://img.shields.io/npm/v/jtdify.svg?style=flat)](https://www.npmjs.com/package/jtdify) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
-This is a **tiny wrapper** for the Node.js standard library [`http`](https://nodejs.org/api/http.html) module.
+**Pitico** is a **tiny wrapper** for the Node.js standard library [`http`](https://nodejs.org/api/http.html) module. It is intended for writing **really small internal API servers** where **all you need** is moving JSON payloads in and out, and think **even Fastify might be overkill** for your needs. It is of course inspired by Fastify, and offers a very limited degree of compatibility at the moment.
 
 ## Features
 
