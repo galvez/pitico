@@ -1,0 +1,10 @@
+extends:
+  - standard
+rules:
+  no-useless-escape: off
+  import/no-absolute-path: off
+  no-return-assign: off
+  no-comma-dangle: off
+  comma-dangle: off
+ignorePatterns:
+  - dist

@@ -1,0 +1,43 @@
+{
+  "type": "module",
+  "name": "jtdify",
+  "version": "0.1.0",
+  "author": {
+    "name": "Jonas Galvez",
+    "email": "jonasgalvez@gmail.com",
+    "url": "https://hire.jonasgalvez.com.br"
+  },
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint . --fix",
+    "test": "node --test",
+    "build": "vite build"
+  },
+  "files": [
+    "dist/*"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/jtdify.cjs",
+      "import": "./dist/jtdify.esm.js"
+    }
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "jsontypedef": "^0.0.2",
+    "light-my-request": "^5.10.0",
+    "raw-body": "^2.5.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.39.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "vite": "^4.3.9"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
