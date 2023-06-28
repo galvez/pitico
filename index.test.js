@@ -24,3 +24,12 @@ test('should serialize JSON requests', async (t) => {
   })
   assert.equal(res.json().foobar, 'foobar')
 })
+
+test('should be able to send empty responses', async (t) => {
+  const res = await server.inject({
+    method: 'POST',
+    url: '/empty',
+    payload: { foobar: 'foobar' }
+  })
+  assert.equal(res.body, '')
+})

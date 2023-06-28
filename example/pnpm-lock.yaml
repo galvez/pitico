@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   pitico:
-    specifier: ^0.1.1
-    version: 0.1.1
+    specifier: file:../
+    version: file:..
 
 packages:
 
@@ -73,15 +73,6 @@ packages:
       set-cookie-parser: 2.6.0
     dev: false
 
-  /pitico@0.1.1:
-    resolution: {integrity: sha512-MsHFKAI5+LIiFDToBRhz76wbc/wNYb9/z2zGSDYM1Bc0PpEQGNIGMZSH2WaL3xrXH3wrGUbC0rdKSRBd/ski3w==}
-    dependencies:
-      ajv: 8.12.0
-      jsontypedef: 0.0.2
-      light-my-request: 5.10.0
-      raw-body: 2.5.2
-    dev: false
-
   /process-warning@2.2.0:
     resolution: {integrity: sha512-/1WZ8+VQjR6avWOgHeEPd7SDQmFQ1B5mC1eRXsCm5TarlNmx/wCsa5GEaxGm05BORRtyG/Ex/3xq3TuRvq57qg==}
     dev: false
@@ -137,4 +128,15 @@ packages:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.3.0
+    dev: false
+
+  file:..:
+    resolution: {directory: .., type: directory}
+    name: pitico
+    version: 0.1.2
+    dependencies:
+      ajv: 8.12.0
+      jsontypedef: 0.0.2
+      light-my-request: 5.10.0
+      raw-body: 2.5.2
     dev: false

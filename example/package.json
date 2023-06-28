@@ -2,6 +2,6 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "pitico": "^0.1.1"
+    "pitico": "file:../"
   }
 }

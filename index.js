@@ -9,6 +9,7 @@ import Ajv from 'ajv/dist/jtd.js'
 const kRoutes = Symbol('kRoutes')
 const kDispatcher = Symbol('kDispatcher')
 const kServer = Symbol('kServer')
+const kRoute = Symbol('kRoute')
 
 export default function Pitico (endpoints) {
   const ajv = new Ajv()
@@ -28,7 +29,7 @@ export default function Pitico (endpoints) {
         handleNotFound(res)
       }
     },
-    route (routeModule, exportedPath) {
+    [kRoute] (routeModule, exportedPath) {
       const {
         path: routeModulePath,
         handle,
@@ -85,11 +86,11 @@ export default function Pitico (endpoints) {
 
   if (Array.isArray(endpoints)) {
     for (const endpoint of endpoints) {
-      server.route(endpoint.default ?? endpoint, endpoint.path)
+      server[kRoute](endpoint.default ?? endpoint, endpoint.path)
     }
   } else {
     for (const [path, endpoint] of Object.entries(endpoints)) {
-      server.route(path, endpoint)
+      server[kRoute](path, endpoint)
     }
   }
 
@@ -110,13 +111,20 @@ function handleRequest (req, { parse }) {
       if (err) {
         return reject(err)
       }
-      req.body = parse(data)
+      if (data) {
+        req.body = (parse ?? JSON.parse)(data)
+      }
       resolve(req)
     })
   })
 }
 
 function sendResponse (res, route, json) {
+  if (!json) {
+    res.setHeader('Content-Type', 'plain/text')
+    res.end('')
+    return
+  }
   const serialized = route.serialize
     ? route.serialize(json)
     : JSON.stringify(json)
