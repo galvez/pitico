@@ -14,6 +14,7 @@ const kRoute = Symbol('kRoute')
 export default function Pitico (endpoints) {
   const ajv = new Ajv()
   const routes = new Map()
+  const noop = () => {}
   const server = {
     [kRoutes]: routes,
     [kDispatcher] (req, res) {
@@ -45,6 +46,7 @@ export default function Pitico (endpoints) {
       const path = exportedPath ?? routeModulePath
       this[kRoutes].set(path, { parse, serialize, handle })
     },
+    addHook: noop,
     inject (options) {
       return new Promise((resolve, reject) => {
         inject(this[kDispatcher], options, (err, res) => {
