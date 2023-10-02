@@ -9,6 +9,7 @@ const serialize = require('./example/serialize.cjs')
 const server = Pitico([parse, serialize])
 
 test('should parse JSON requests', async (t) => {
+  await server.ready()
   const res = await server.inject({
     method: 'POST',
     url: '/parse',
@@ -18,6 +19,7 @@ test('should parse JSON requests', async (t) => {
 })
 
 test('should serialize JSON requests', async (t) => {
+  await server.ready()
   const res = await server.inject({
     method: 'POST',
     url: '/serialize',

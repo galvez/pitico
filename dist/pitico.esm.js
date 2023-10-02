@@ -1,45 +1,45 @@
-import { IncomingMessage as y, createServer as k } from "node:http";
-import w from "jsontypedef";
-import R from "light-my-request";
-import z from "raw-body";
-import C from "ajv/dist/jtd.js";
-const u = Symbol("kRoutes"), l = Symbol("kDispatcher"), d = Symbol("kServer"), p = Symbol("kRoute");
-function O(e) {
-  const a = new C(), i = /* @__PURE__ */ new Map(), f = () => {
+import { IncomingMessage as g, createServer as k } from "node:http";
+import R from "jsontypedef";
+import z from "light-my-request";
+import P from "raw-body";
+import v from "ajv/dist/jtd.js";
+const u = Symbol("kRoutes"), p = Symbol("kDispatcher"), d = Symbol("kServer"), h = Symbol("kRoute"), y = Symbol("kReady");
+function T(n) {
+  const a = new v(), i = /* @__PURE__ */ new Map(), l = () => {
   }, c = {
     [u]: i,
-    [l](t, n) {
+    [p](t, e) {
       const o = i.get(t.url), r = o?.handle;
-      r ? v(t, o).then((s) => r(s, n)).then((s) => P(n, o, s)).catch((s) => x(n, s)) : j(n);
+      r ? C(t, o).then((s) => r(s, e)).then((s) => j(e, o, s)).catch((s) => H(e, s)) : x(e);
     },
-    [p](t, n) {
+    async [h](t, e) {
       const {
         path: o,
         handle: r,
         parse: s,
-        serialize: h
-      } = typeof t == "function" ? t(this, w) : t, g = s && a.compileParser(s), S = h && a.compileSerializer(h), b = n ?? o;
-      this[u].set(b, { parse: g, serialize: S, handle: r });
+        serialize: f
+      } = typeof t == "function" ? await t(this, R) : t, S = s && a.compileParser(s), w = f && a.compileSerializer(f), b = e ?? o;
+      this[u].set(b, { parse: S, serialize: w, handle: r });
     },
-    addHook: f,
+    addHook: l,
     inject(t) {
-      return new Promise((n, o) => {
-        R(this[l], t, (r, s) => {
+      return new Promise((e, o) => {
+        z(this[p], t, (r, s) => {
           if (r)
             return o(r);
-          n(s);
+          e(s);
         });
       });
     },
-    decorate(t, n) {
-      this[t] = n;
+    decorate(t, e) {
+      this[t] = e;
     },
-    decorateRequest(t, n) {
-      y.prototype[t] = n;
+    decorateRequest(t, e) {
+      g.prototype[t] = e;
     },
-    async register(t, n) {
+    async register(t, e) {
       try {
-        await t(this, n, (o) => {
+        await t(this, e, (o) => {
           o && m(o);
         });
       } catch (o) {
@@ -47,61 +47,67 @@ function O(e) {
       }
     },
     async listen(t) {
-      return new Promise((n, o) => {
+      return await this.ready(), new Promise((e, o) => {
         this[d].listen(t, (r) => {
           if (r)
             return o(r);
-          n();
+          e();
         });
       });
+    },
+    async ready() {
+      if (this[y])
+        return;
+      const t = [];
+      if (Array.isArray(n))
+        for (const e of n)
+          t.push(c[h](e.default ?? e, e.path));
+      else
+        for (const [e, o] of Object.entries(n))
+          t.push(c[h](e, o));
+      await Promise.all(t), this[y] = !0;
     }
   };
-  if (Array.isArray(e))
-    for (const t of e)
-      c[p](t.default ?? t, t.path);
-  else
-    for (const [t, n] of Object.entries(e))
-      c[p](t, n);
-  return c[d] = k(c[l]), c;
+  return c[d] = k(c[p]), c;
 }
-y.prototype.body = null;
-function v(e, { parse: a }) {
-  return new Promise((i, f) => {
-    z(e, {
-      length: e.headers["content-length"],
+g.prototype.body = null;
+function C(n, { parse: a }) {
+  return new Promise((i, l) => {
+    P(n, {
+      length: n.headers["content-length"],
       limit: "1mb",
       encoding: "utf8"
     }, (c, t) => {
       if (c)
-        return f(c);
-      t && (e.body = (a ?? JSON.parse)(t)), i(e);
+        return l(c);
+      t && (n.body = (a ?? JSON.parse)(t)), i(n);
     });
   });
 }
-function P(e, a, i) {
+function j(n, a, i) {
   if (!i) {
-    e.setHeader("Content-Type", "plain/text"), e.end("");
+    n.setHeader("Content-Type", "plain/text"), n.end("");
     return;
   }
-  const f = a.serialize ? a.serialize(i) : JSON.stringify(i);
-  e.writeHead(200, {
+  const l = a.serialize ? a.serialize(i) : JSON.stringify(i);
+  n.writeHead(200, {
     "Content-Type": "application/json",
-    "Content-Length": Buffer.byteLength(f)
-  }), e.end(f);
+    "Content-Length": Buffer.byteLength(l)
+  }), n.end(l);
 }
-function j(e) {
-  e.statusCode = 404, e.end("");
+function x(n) {
+  n.statusCode = 404, n.end("");
 }
-function x(e, a) {
+function H(n, a) {
   const i = a.toString();
-  e.statusCode = 500, e.writeHead(200, {
+  n.writeHead(500, {
     "Content-Type": "text/plain",
     "Content-Length": Buffer.byteLength(i)
-  }), e.end(i);
+  }), n.end(i);
 }
-function m(e) {
-  console.error(e), process.exit(1);
+function m(n) {
+  console.error(n), process.exit(1);
 }
 export {
-  O as default
+  T as default
 };

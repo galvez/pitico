@@ -8,6 +8,7 @@ export default (server, { object, string }) => ({
   handle (req, res) {
     return {
       foobar: req.body.foobar,
+      something: server.something,      
     }
   },
 })

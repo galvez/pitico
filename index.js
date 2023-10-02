@@ -10,6 +10,7 @@ const kRoutes = Symbol('kRoutes')
 const kDispatcher = Symbol('kDispatcher')
 const kServer = Symbol('kServer')
 const kRoute = Symbol('kRoute')
+const kReady = Symbol('kReady')
 
 export default function Pitico (endpoints) {
   const ajv = new Ajv()
@@ -20,7 +21,6 @@ export default function Pitico (endpoints) {
     [kDispatcher] (req, res) {
       const route = routes.get(req.url)
       const handle = route?.handle
-
       if (handle) {
         handleRequest(req, route)
           .then(req => handle(req, res))
@@ -30,14 +30,14 @@ export default function Pitico (endpoints) {
         handleNotFound(res)
       }
     },
-    [kRoute] (routeModule, exportedPath) {
+    async [kRoute] (routeModule, exportedPath) {
       const {
         path: routeModulePath,
         handle,
         parse: parsingSchema,
         serialize: serializingSchema
       } = typeof routeModule === 'function'
-        ? routeModule(this, jsontypedef)
+        ? await routeModule(this, jsontypedef)
         : routeModule
       const parse = parsingSchema &&
         ajv.compileParser(parsingSchema)
@@ -75,6 +75,7 @@ export default function Pitico (endpoints) {
       }
     },
     async listen (options) {
+      await this.ready()
       return new Promise((resolve, reject) => {
         this[kServer].listen(options, (err) => {
           if (err) {
@@ -83,16 +84,23 @@ export default function Pitico (endpoints) {
           resolve()
         })
       })
-    }
-  }
-
-  if (Array.isArray(endpoints)) {
-    for (const endpoint of endpoints) {
-      server[kRoute](endpoint.default ?? endpoint, endpoint.path)
-    }
-  } else {
-    for (const [path, endpoint] of Object.entries(endpoints)) {
-      server[kRoute](path, endpoint)
+    },
+    async ready () {
+      if (this[kReady]) {
+        return
+      }
+      const p = []
+      if (Array.isArray(endpoints)) {
+        for (const endpoint of endpoints) {
+          p.push(server[kRoute](endpoint.default ?? endpoint, endpoint.path))
+        }
+      } else {
+        for (const [path, endpoint] of Object.entries(endpoints)) {
+          p.push(server[kRoute](path, endpoint))
+        }
+      }
+      await Promise.all(p)
+      this[kReady] = true
     }
   }
 
@@ -144,8 +152,7 @@ function handleNotFound (res) {
 
 function handleError (res, err) {
   const errString = err.toString()
-  res.statusCode = 500
-  res.writeHead(200, {
+  res.writeHead(500, {
     'Content-Type': 'text/plain',
     'Content-Length': Buffer.byteLength(errString),
   })
