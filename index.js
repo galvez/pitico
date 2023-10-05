@@ -5,6 +5,9 @@ import jsontypedef from 'jsontypedef'
 import inject from 'light-my-request'
 import getRawBody from 'raw-body'
 import Ajv from 'ajv/dist/jtd.js'
+import Pino from 'pino'
+
+import { serializers } from './logging.js'
 
 const kRoutes = Symbol('kRoutes')
 const kDispatcher = Symbol('kDispatcher')
@@ -12,20 +15,27 @@ const kServer = Symbol('kServer')
 const kRoute = Symbol('kRoute')
 const kReady = Symbol('kReady')
 
-export default function Pitico (endpoints) {
+export default function Pitico (endpoints, opts = {}) {
   const ajv = new Ajv()
   const routes = new Map()
   const noop = () => {}
+
+  let logger = opts.logger
+  if (!logger && logger !== false) {
+    logger = Pino({ serializers })
+  }
+
+  const scope = { log: logger }
   const server = {
     [kRoutes]: routes,
     [kDispatcher] (req, res) {
       const route = routes.get(req.url)
       const handle = route?.handle
       if (handle) {
-        handleRequest(req, route)
+        handleRequest.call(scope, req, res, route)
           .then(req => handle(req, res))
           .then(json => sendResponse(res, route, json))
-          .catch(err => handleError(res, err))
+          .catch(err => handleError(req, res, err, logger))
       } else {
         handleNotFound(res)
       }
@@ -111,7 +121,7 @@ export default function Pitico (endpoints) {
 
 IncomingMessage.prototype.body = null
 
-function handleRequest (req, { parse }) {
+function handleRequest (req, res, { parse }) {
   return new Promise((resolve, reject) => {
     getRawBody(req, {
       length: req.headers['content-length'],
@@ -124,6 +134,7 @@ function handleRequest (req, { parse }) {
       if (data) {
         req.body = (parse ?? JSON.parse)(data)
       }
+      this.log.info({ req, res })
       resolve(req)
     })
   })
@@ -150,13 +161,13 @@ function handleNotFound (res) {
   res.end('')
 }
 
-function handleError (res, err) {
-  const errString = err.toString()
+function handleError (req, res, err, logger) {
   res.writeHead(500, {
     'Content-Type': 'text/plain',
-    'Content-Length': Buffer.byteLength(errString),
+    'Content-Length': 0,
   })
-  res.end(errString)
+  res.end('')
+  logger.error?.({ err, req, res })
 }
 
 function fatal (error) {

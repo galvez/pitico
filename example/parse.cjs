@@ -5,6 +5,9 @@ module.exports = (server, { object, string }) => ({
     foobar: string(),
   }),
   handle (req, res) {
+    if (!req.body.foobar) {
+      throw new Error('foobar missing')
+    }
     return {
       foobar: req.body.foobar,
     }
