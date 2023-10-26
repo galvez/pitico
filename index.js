@@ -134,7 +134,7 @@ function handleRequest (req, res, { parse }) {
       if (data) {
         req.body = (parse ?? JSON.parse)(data)
       }
-      this.log.info({ req, res })
+      this.log?.info?.({ req, res })
       resolve(req)
     })
   })
