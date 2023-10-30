@@ -1,4 +1,4 @@
-import { IncomingMessage as G, createServer as K } from "node:http";
+import { IncomingMessage as $, createServer as K } from "node:http";
 import Q from "jsontypedef";
 import X from "light-my-request";
 import Y from "raw-body";
@@ -52,12 +52,12 @@ function ne(e, t, r) {
           if (o >= l || t[o] === void 0)
             break;
           a < c && (n += e.slice(a, c));
-          var y = typeof t[o];
-          if (y === "string") {
+          var p = typeof t[o];
+          if (p === "string") {
             n += "'" + t[o] + "'", a = c + 2, c++;
             break;
           }
-          if (y === "function") {
+          if (p === "function") {
             n += t[o].name || "<anonymous>", a = c + 2, c++;
             break;
           }
@@ -79,13 +79,13 @@ function ne(e, t, r) {
   return a === -1 ? e : (a < d && (n += e.slice(a)), n);
 }
 const D = te;
-S.exports = b;
-const w = pe().console || {}, re = {
+S.exports = m;
+const w = ye().console || {}, re = {
   mapHttpRequest: k,
   mapHttpResponse: k,
-  wrapRequestSerializer: E,
-  wrapResponseSerializer: E,
-  wrapErrorSerializer: E,
+  wrapRequestSerializer: _,
+  wrapResponseSerializer: _,
+  wrapErrorSerializer: _,
   req: k,
   res: k,
   err: N,
@@ -94,7 +94,7 @@ const w = pe().console || {}, re = {
 function O(e, t) {
   return e === "silent" ? 1 / 0 : t.levels.values[e];
 }
-const A = Symbol("pino.logFuncs"), C = Symbol("pino.hierarchy"), ie = {
+const P = Symbol("pino.logFuncs"), A = Symbol("pino.hierarchy"), ie = {
   error: "log",
   fatal: "error",
   warn: "error",
@@ -105,22 +105,22 @@ const A = Symbol("pino.logFuncs"), C = Symbol("pino.hierarchy"), ie = {
 function M(e, t) {
   const r = {
     logger: t,
-    parent: e[C]
+    parent: e[A]
   };
-  t[C] = r;
+  t[A] = r;
 }
 function se(e, t, r) {
   const i = {};
   t.forEach((s) => {
     i[s] = r[s] ? r[s] : w[s] || w[ie[s] || "log"] || g;
-  }), e[A] = i;
+  }), e[P] = i;
 }
 function oe(e, t) {
   return Array.isArray(e) ? e.filter(function(i) {
     return i !== "!stdSerializers.err";
   }) : e === !0 ? Object.keys(t) : !1;
 }
-function b(e) {
+function m(e) {
   e = e || {}, e.browser = e.browser || {};
   const t = e.browser.transmit;
   if (t && typeof t.send != "function")
@@ -131,8 +131,8 @@ function b(e) {
   let u = e.browser.serialize;
   Array.isArray(e.browser.serialize) && e.browser.serialize.indexOf("!stdSerializers.err") > -1 && (u = !1);
   const h = Object.keys(e.customLevels || {}), f = ["error", "fatal", "warn", "info", "debug", "trace"].concat(h);
-  typeof r == "function" && f.forEach(function(m) {
-    r[m] = r;
+  typeof r == "function" && f.forEach(function(b) {
+    r[b] = r;
   }), (e.enabled === !1 || e.browser.disabled) && (e.level = "silent");
   const l = e.level || "info", n = Object.create(r);
   n.log || (n.log = g), se(n, f, r), M({}, n), Object.defineProperty(n, "levelVal", {
@@ -146,44 +146,44 @@ function b(e) {
     serialize: s,
     asObject: e.browser.asObject,
     levels: f,
-    timestamp: me(e)
+    timestamp: be(e)
   };
-  n.levels = ae(e), n.level = l, n.setMaxListeners = n.getMaxListeners = n.emit = n.addListener = n.on = n.prependListener = n.once = n.prependOnceListener = n.removeListener = n.removeAllListeners = n.listeners = n.listenerCount = n.eventNames = n.write = n.flush = g, n.serializers = i, n._serialize = s, n._stdErrSerialize = u, n.child = y, t && (n._logEvent = P());
+  n.levels = ae(e), n.level = l, n.setMaxListeners = n.getMaxListeners = n.emit = n.addListener = n.on = n.prependListener = n.once = n.prependOnceListener = n.removeListener = n.removeAllListeners = n.listeners = n.listenerCount = n.eventNames = n.write = n.flush = g, n.serializers = i, n._serialize = s, n._stdErrSerialize = u, n.child = p, t && (n._logEvent = C());
   function a() {
     return O(this.level, this);
   }
   function d() {
     return this._level;
   }
-  function c(m) {
-    if (m !== "silent" && !this.levels.values[m])
-      throw Error("unknown level " + m);
-    this._level = m, p(this, o, n, "error"), p(this, o, n, "fatal"), p(this, o, n, "warn"), p(this, o, n, "info"), p(this, o, n, "debug"), p(this, o, n, "trace"), h.forEach((v) => {
-      p(this, o, n, v);
+  function c(b) {
+    if (b !== "silent" && !this.levels.values[b])
+      throw Error("unknown level " + b);
+    this._level = b, y(this, o, n, "error"), y(this, o, n, "fatal"), y(this, o, n, "warn"), y(this, o, n, "info"), y(this, o, n, "debug"), y(this, o, n, "trace"), h.forEach((v) => {
+      y(this, o, n, v);
     });
   }
-  function y(m, v) {
-    if (!m)
+  function p(b, v) {
+    if (!b)
       throw new Error("missing bindings for child Pino");
-    v = v || {}, s && m.serializers && (v.serializers = m.serializers);
+    v = v || {}, s && b.serializers && (v.serializers = b.serializers);
     const R = v.serializers;
     if (s && R) {
       var z = Object.assign({}, i, R), F = e.browser.serialize === !0 ? Object.keys(z) : s;
-      delete m.serializers, j([m], F, z, this._stdErrSerialize);
+      delete b.serializers, j([b], F, z, this._stdErrSerialize);
     }
     function x(V) {
-      this._childLevel = (V._childLevel | 0) + 1, this.bindings = m, z && (this.serializers = z, this._serialize = F), t && (this._logEvent = P(
-        [].concat(V._logEvent.bindings, m)
+      this._childLevel = (V._childLevel | 0) + 1, this.bindings = b, z && (this.serializers = z, this._serialize = F), t && (this._logEvent = C(
+        [].concat(V._logEvent.bindings, b)
       ));
     }
     x.prototype = this;
-    const _ = new x(this);
-    return M(this, _), _.level = this.level, _;
+    const E = new x(this);
+    return M(this, E), E.level = this.level, E;
   }
   return n;
 }
 function ae(e) {
-  const t = e.customLevels || {}, r = Object.assign({}, b.levels.values, t), i = Object.assign({}, b.levels.labels, le(t));
+  const t = e.customLevels || {}, r = Object.assign({}, m.levels.values, t), i = Object.assign({}, m.levels.labels, le(t));
   return {
     values: r,
     labels: i
@@ -195,7 +195,7 @@ function le(e) {
     t[e[r]] = r;
   }), t;
 }
-b.levels = {
+m.levels = {
   values: {
     fatal: 60,
     error: 50,
@@ -213,18 +213,18 @@ b.levels = {
     60: "fatal"
   }
 };
-b.stdSerializers = re;
-b.stdTimeFunctions = Object.assign({}, { nullTime: W, epochTime: U, unixTime: be, isoTime: ve });
+m.stdSerializers = re;
+m.stdTimeFunctions = Object.assign({}, { nullTime: G, epochTime: W, unixTime: me, isoTime: ve });
 function ce(e) {
   const t = [];
   e.bindings && t.push(e.bindings);
-  let r = e[C];
+  let r = e[A];
   for (; r.parent; )
     r = r.parent, r.logger.bindings && t.push(r.logger.bindings);
   return t.reverse();
 }
-function p(e, t, r, i) {
-  if (e[i] = O(e.level, r) > O(i, r) ? g : r[A][i], !t.transmit && e[i] === g)
+function y(e, t, r, i) {
+  if (e[i] = O(e.level, r) > O(i, r) ? g : r[P][i], !t.transmit && e[i] === g)
     return;
   e[i] = fe(e, t, r, i);
   const s = ce(e);
@@ -256,7 +256,7 @@ function fe(e, t, r, i) {
         }, f);
       }
     };
-  }(e[A][i]);
+  }(e[P][i]);
 }
 function he(e, t, r, i) {
   e._serialize && j(r, e._serialize, e.serializers, e._stdErrSerialize);
@@ -276,7 +276,7 @@ function he(e, t, r, i) {
 function j(e, t, r, i) {
   for (const s in e)
     if (i && e[s] instanceof Error)
-      e[s] = b.stdSerializers.err(e[s]);
+      e[s] = m.stdSerializers.err(e[s]);
     else if (typeof e[s] == "object" && !Array.isArray(e[s]))
       for (const u in e[s])
         t && t.indexOf(u) > -1 && u in r && (e[s][u] = r[u](e[s][u]));
@@ -290,9 +290,9 @@ function de(e, t, r) {
     e._stdErrSerialize === void 0 ? !0 : e._stdErrSerialize
   ), e._logEvent.ts = s, e._logEvent.messages = r.filter(function(n) {
     return l.indexOf(n) === -1;
-  }), e._logEvent.level.label = u, e._logEvent.level.value = h, i(u, e._logEvent, f), e._logEvent = P(l);
+  }), e._logEvent.level.label = u, e._logEvent.level.value = h, i(u, e._logEvent, f), e._logEvent = C(l);
 }
-function P(e) {
+function C(e) {
   return {
     ts: 0,
     messages: [],
@@ -310,30 +310,30 @@ function N(e) {
     t[r] === void 0 && (t[r] = e[r]);
   return t;
 }
-function me(e) {
-  return typeof e.timestamp == "function" ? e.timestamp : e.timestamp === !1 ? W : U;
+function be(e) {
+  return typeof e.timestamp == "function" ? e.timestamp : e.timestamp === !1 ? G : W;
 }
 function k() {
   return {};
 }
-function E(e) {
+function _(e) {
   return e;
 }
 function g() {
 }
-function W() {
+function G() {
   return !1;
 }
-function U() {
+function W() {
   return Date.now();
 }
-function be() {
+function me() {
   return Math.round(Date.now() / 1e3);
 }
 function ve() {
   return new Date(Date.now()).toISOString();
 }
-function pe() {
+function ye() {
   function e(t) {
     return typeof t < "u" && t;
   }
@@ -348,10 +348,10 @@ function pe() {
     return e(self) || e(window) || e(this) || {};
   }
 }
-S.exports.default = b;
-S.exports.pino = b;
-var ye = S.exports;
-const $ = /* @__PURE__ */ q(ye), we = {
+S.exports.default = m;
+S.exports.pino = m;
+var pe = S.exports;
+const U = /* @__PURE__ */ q(pe), we = {
   req(e) {
     return {
       method: e.method,
@@ -362,7 +362,7 @@ const $ = /* @__PURE__ */ q(ye), we = {
       remotePort: e.socket ? e.socket.remotePort : void 0
     };
   },
-  err: $.stdSerializers.err,
+  err: U.stdSerializers.err,
   res(e) {
     return {
       statusCode: e.statusCode
@@ -373,7 +373,7 @@ function Te(e, t = {}) {
   const r = new Z(), i = /* @__PURE__ */ new Map(), s = () => {
   };
   let u = t.logger;
-  !u && u !== !1 && (u = $({ serializers: we }));
+  !u && u !== !1 && (u = U({ serializers: we, level: t.logLevel ?? "info" }));
   const h = { log: u }, f = {
     [H]: i,
     [L](l, n) {
@@ -386,8 +386,8 @@ function Te(e, t = {}) {
         handle: a,
         parse: d,
         serialize: c
-      } = typeof l == "function" ? await l(this, Q) : l, y = d && r.compileParser(d), m = c && r.compileSerializer(c), v = n ?? o;
-      this[H].set(v, { parse: y, serialize: m, handle: a });
+      } = typeof l == "function" ? await l(this, Q) : l, p = d && r.compileParser(d), b = c && r.compileSerializer(c), v = n ?? o;
+      this[H].set(v, { parse: p, serialize: b, handle: a });
     },
     addHook: s,
     inject(l) {
@@ -403,7 +403,7 @@ function Te(e, t = {}) {
       this[l] = n;
     },
     decorateRequest(l, n) {
-      G.prototype[l] = n;
+      $.prototype[l] = n;
     },
     async register(l, n) {
       try {
@@ -438,7 +438,7 @@ function Te(e, t = {}) {
   };
   return f[B] = K(f[L]), f;
 }
-G.prototype.body = null;
+$.prototype.body = null;
 function ge(e, t, { parse: r }) {
   return new Promise((i, s) => {
     Y(e, {
@@ -448,7 +448,20 @@ function ge(e, t, { parse: r }) {
     }, (u, h) => {
       if (u)
         return s(u);
-      h && (e.body = (r ?? JSON.parse)(h)), this.log.info({ req: e, res: t }), i(e);
+      if (h)
+        if (r)
+          e.body = r(h), e.body || this.log?.error({
+            req: e,
+            res: t,
+            err: new Error(`Ajv parsing error: ${r.message} at ${r.position}`)
+          });
+        else
+          try {
+            e.body = JSON.parse(h);
+          } catch {
+            e.body = void 0;
+          }
+      this.log?.info?.({ req: e, res: t }), i(e);
     });
   });
 }

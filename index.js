@@ -22,7 +22,7 @@ export default function Pitico (endpoints, opts = {}) {
 
   let logger = opts.logger
   if (!logger && logger !== false) {
-    logger = Pino({ serializers })
+    logger = Pino({ serializers, level: opts.logLevel ?? 'info' })
   }
 
   const scope = { log: logger }
@@ -132,7 +132,26 @@ function handleRequest (req, res, { parse }) {
         return reject(err)
       }
       if (data) {
-        req.body = (parse ?? JSON.parse)(data)
+        if (parse) {
+          req.body = parse(data)
+          if (!req.body) {
+            this.log?.error({
+              req,
+              res,
+              err: new Error(`Ajv parsing error: ${
+                parse.message
+              } at ${
+                parse.position
+              }`)
+            })
+          }
+        } else {
+          try {
+            req.body = JSON.parse(data)
+          } catch {
+            req.body = undefined
+          }
+        }
       }
       this.log?.info?.({ req, res })
       resolve(req)

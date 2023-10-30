@@ -21,6 +21,23 @@ beforeAll(async () => {
   await server.ready()
 })
 
+test('should log ajv parsing errors', async (t) => {
+  const [, log] = await Promise.all([
+    server.inject({
+      method: 'POST',
+      url: '/parse',
+      payload: '{ foobar: 123 '
+    }),
+    new Promise((resolve) => {
+      emitter.on('data', (data) => {
+        resolve(JSON.parse(data))
+      })
+    })
+  ])
+  assert.equal(log.req.url, '/parse')
+  assert.ok(log.err?.message.startsWith('Ajv parsing error'))
+})
+
 test('should log requests', async (t) => {
   const [res, log] = await Promise.all([
     server.inject({
@@ -39,25 +56,21 @@ test('should log requests', async (t) => {
 })
 
 test('should log and return 500 on errors', async (t) => {
-  const [, [request, error]] = await Promise.all([
+  const [request, error] = await Promise.all([
     server.inject({
       method: 'POST',
       url: '/parse',
       payload: { foobar: 123 }
     }),
     new Promise((resolve) => {
-      let i = 0
-      const logs = []
       emitter.on('data', (data) => {
-        logs.push(JSON.parse(data))
-        if (i++ === 1) {
-          resolve(logs)
-        }
+        resolve(JSON.parse(data))
       })
     })
   ])
-  assert.equal(request.req.url, '/parse')
-  assert.equal(error.err.type, 'TypeError')
+  assert.equal(request.statusCode, 500)
+  assert.equal(error.req.url, '/parse')
+  assert.ok(error.err.message.startsWith('Ajv parsing error'))
 })
 
 test('should parse JSON requests', async (t) => {
