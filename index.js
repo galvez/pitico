@@ -135,7 +135,7 @@ function handleRequest (req, res, { parse }) {
         if (parse) {
           req.body = parse(data)
           if (!req.body) {
-            this.log?.error({
+            this.log?.error?.({
               req,
               res,
               err: new Error(`Ajv parsing error: ${

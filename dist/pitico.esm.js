@@ -450,7 +450,7 @@ function ge(e, t, { parse: r }) {
         return s(u);
       if (h)
         if (r)
-          e.body = r(h), e.body || this.log?.error({
+          e.body = r(h), e.body || this.log?.error?.({
             req: e,
             res: t,
             err: new Error(`Ajv parsing error: ${r.message} at ${r.position}`)
